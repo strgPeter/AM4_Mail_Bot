@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -8,9 +9,19 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
 
+        final int FUEL_THRESHOLD = 600;
+        final int CO2_THRESHOLD = 120;
+
         ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
         ses.scheduleAtFixedRate(() -> {
-            Scraper.getData();
+            Optional<ScrapeResult> optionalScraperResult = Scraper.getData();
+
+            if (optionalScraperResult.isEmpty()) return;
+
+            ScrapeResult scraperResult = optionalScraperResult.get();
+
+
+
         }, 0, 30, TimeUnit.MINUTES);
 
         // Add shutdown hook for graceful termination
