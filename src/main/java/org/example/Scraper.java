@@ -20,15 +20,18 @@ public class Scraper {
     private final static String URL = "https://airlinemanager.com";
 
     static Optional<ScrapeResult> getData() {
+
+        Optional<ScrapeResult> result = Optional.empty();
+
         WebDriverManager.chromedriver().setup();
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-blink-features=AutomationControlled");
         options.setExperimentalOption("excludeSwitches", List.of("enable-automation"));
         options.setExperimentalOption("useAutomationExtension", false);
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        //options.addArguments("--window-size=1920,1080");
+        //options.addArguments("--headless");
+        //options.addArguments("--disable-gpu");
+        options.addArguments("--window-size=1080,720");
         options.addArguments("--no-sandbox");
 
         WebDriver driver = new ChromeDriver(options);
@@ -39,18 +42,20 @@ public class Scraper {
 
             login(driver);
 
-            if (!isInitial(driver)) {
-                System.out.println("Game page loaded: " + driver.getTitle());
-            }
+            if (isInitial(driver)) throw new IllegalStateException();
 
-        } catch (Exception e) {
-            System.out.println("Login failed: " + e.getMessage());
-            return Optional.empty();
+            result = Optional.of(getPrices(driver));
+
+        }catch (IllegalStateException ise) {
+            System.out.println("Login failed: " + ise.getMessage());
+            result = Optional.empty();
+        }catch (Exception e) {
+            System.out.println("Something went wrong: " + e.getMessage());
+            result = Optional.empty();
         } finally {
             driver.quit();
         }
-
-        return Optional.of(new ScrapeResult());
+        return result;
     }
 
     private static void login(WebDriver driver){
@@ -101,6 +106,29 @@ public class Scraper {
             }
 
         } while (loginAttempts > 0);
+    }
+
+    private static ScrapeResult getPrices(WebDriver driver){
+        WebDriverWait www = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        // Wait for preloader to disappear
+        www.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div.preloader")));
+
+        WebElement resourcesBtn = www.until(ExpectedConditions.elementToBeClickable(By.id("mapMaint")));
+        resourcesBtn.click();
+
+        WebElement fuelPriceElement = www.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[9]/div/div/div[3]/div[2]/div/div[1]/span[2]/b")));
+        String fuelPriceText = fuelPriceElement.getText();
+        System.out.println("Raw Fuel Price Text: " + fuelPriceText);
+
+        WebElement co2btn = www.until(ExpectedConditions.visibilityOfElementLocated(By.id("popBtn2")));
+        co2btn.click();
+
+        WebElement co2PriceElement = www.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[9]/div/div/div[3]/div[2]/div/div/div[2]/span[2]/b")));
+        String co2PriceText = co2PriceElement.getText();
+        System.out.println("Raw Co2 Price Text: " + co2PriceText);
+
+        return new ScrapeResult(fuelPriceText, co2PriceText);
     }
 
     private static Boolean isInitial(WebDriver driver) {
