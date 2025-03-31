@@ -1,18 +1,19 @@
 package org.example;
 
 public class ScrapeResult {
-    private String s_fuel;
-    private String s_co2;
 
     private int fuel;
     private int co2;
 
     public ScrapeResult(String fuel, String co2) {
-        s_fuel = fuel;
-        s_co2 = co2;
 
-        this.fuel = Integer.parseInt(s_fuel.replace("$", "").replace(",", "").trim());
-        this.co2 = Integer.parseInt(s_co2.replace("$", "").replace(",", "").trim());
+        try {
+            this.fuel = Integer.parseInt(fuel.replace("$", "").replace(",", "").trim());
+            this.co2 = Integer.parseInt(co2.replace("$", "").replace(",", "").trim());
+        } catch (NumberFormatException e) {
+            this.fuel = -1;
+            this.co2 = -1;
+        }
     }
 
     public int getFuel() {

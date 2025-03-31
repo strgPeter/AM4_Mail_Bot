@@ -29,9 +29,9 @@ public class Scraper {
         options.addArguments("--disable-blink-features=AutomationControlled");
         options.setExperimentalOption("excludeSwitches", List.of("enable-automation"));
         options.setExperimentalOption("useAutomationExtension", false);
-        //options.addArguments("--headless");
-        //options.addArguments("--disable-gpu");
-        options.addArguments("--window-size=1080,720");
+        options.addArguments("--headless");
+        options.addArguments("--disable-gpu");
+        //options.addArguments("--window-size=1080,720");
         options.addArguments("--no-sandbox");
 
         WebDriver driver = new ChromeDriver(options);
