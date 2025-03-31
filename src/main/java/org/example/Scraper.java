@@ -31,8 +31,9 @@ public class Scraper {
         options.setExperimentalOption("useAutomationExtension", false);
         options.addArguments("--headless");
         options.addArguments("--disable-gpu");
-        //options.addArguments("--window-size=1080,720");
+        options.addArguments("--window-size=1080,720");
         options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
 
         WebDriver driver = new ChromeDriver(options);
 
