@@ -38,6 +38,7 @@ public class Scraper {
         WebDriver driver = new ChromeDriver(options);
 
         try {
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
             driver.get(URL);
             System.out.println("Initial page loaded: " + driver.getTitle());
 
@@ -93,7 +94,7 @@ public class Scraper {
             WebElement loginOnLoginForm = form.findElement(By.id("btnLogin"));
             loginOnLoginForm.click();
 
-            // Wait for page to load after login (improve this later if needed)
+            // Wait for page to load after login
             new WebDriverWait(driver, Duration.ofSeconds(10))
                     .until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
 

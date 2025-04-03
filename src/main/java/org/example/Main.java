@@ -13,8 +13,8 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
 
-        final int FUEL_THRESHOLD = 600;
-        final int CO2_THRESHOLD = 120;
+        final int FUEL_THRESHOLD = 800;
+        final int CO2_THRESHOLD = 130;
         final Set<String> MAIL_RECIPIENTS = Set.of(System.getenv("MAIL_RECIPIENT_1"));
         final String MAIL_ADMIN = System.getenv("MAIL_RECIPIENT_1");
 
@@ -47,6 +47,12 @@ public class Main {
                     (https://github.com/strgPeter)
                     """.formatted(f, c);
 
+            System.out.println("Fuel: " + f + ", CO2: " + c);
+            System.out.println("FUEL_THRESHOLD: " + FUEL_THRESHOLD + ", CO2_THRESHOLD: " + CO2_THRESHOLD);
+            System.out.println("Condition 1 check (f): " + (f <= FUEL_THRESHOLD && c > CO2_THRESHOLD));
+            System.out.println("Condition 2 check (c): " + (c <= CO2_THRESHOLD && f > FUEL_THRESHOLD));
+            System.out.println("Condition 3 check (b): " + (c <= CO2_THRESHOLD && f <= FUEL_THRESHOLD));
+
             try {
                 if (f <= FUEL_THRESHOLD && c > CO2_THRESHOLD) {
                     MailClient.send(String.format("Fuel: %d", f), msg, MAIL_RECIPIENTS);
@@ -61,6 +67,10 @@ public class Main {
             } catch (MessagingException e) {
                 System.out.println("An error occurred while sending mail notification");
                 System.out.println(e.getMessage());
+            } catch (Exception e){
+                System.out.println("Hmmmmmm?");
+                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
 
         }, 0, 30, TimeUnit.MINUTES);

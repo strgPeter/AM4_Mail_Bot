@@ -9,8 +9,8 @@ import java.util.Set;
 
 public class MailClient {
 
-    private static final String username = System.getenv("MAIL_USERNAME");
-    private static final String password = System.getenv("MAIL_PASSWORD");
+    private static final String username = System.getenv("MAIL_SENDER_USN");
+    private static final String password = System.getenv("MAIL_SENDER_PWD");
 
     public static void send(String subject, String text, Set<String> recipients) throws MessagingException {
         Properties prop = new Properties();
