@@ -11,8 +11,9 @@ RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_
     yum install -y ./google-chrome-stable_current_x86_64.rpm && \
     rm google-chrome-stable_current_x86_64.rpm
 
-# Create app directory
+# Create app and logs directories
 WORKDIR /app
+RUN mkdir -p /app/logs
 
 # Copy the jar file
 COPY target/AM4MailBot_java-1.0-SNAPSHOT.jar app.jar
