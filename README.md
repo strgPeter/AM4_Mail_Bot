@@ -32,7 +32,7 @@ The application is configured via environment variables:
 | AIRLINE_MANAGER_EMAIL | Your AM4 account email | Yes |
 | AIRLINE_MANAGER_PASSWORD | Your AM4 account password | Yes |
 | MAIL_SENDER_USN | Gmail address for sending notifications | Yes |
-| MAIL_SENDER_PWD | Password or app password for the Gmail account | Yes |
+| MAIL_SENDER_PWD | App password for the Gmail account | Yes |
 | MAIL_RECIPIENT_1 | Email address to receive notifications | Yes |
 
 ## Default Settings
